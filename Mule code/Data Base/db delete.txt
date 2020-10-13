@@ -1,0 +1,51 @@
+
+-<db:config doc:id="296ae279-7541-4b51-8333-88b2f91b21ab" doc:name="Database Config" name="Database_Config">
+
+<db:my-sql-connection database="etms" password="Mule@2019" user="muleusr1" port="3306" host="mysql.techriya.com"/>
+
+</db:config>
+
+
+-<http:listener-config doc:id="0169a605-f2aa-4864-b46f-622205e81104" doc:name="HTTP Listener config" name="HTTP_Listener_config2">
+
+<http:listener-connection port="8079" host="0.0.0.0"/>
+
+</http:listener-config>
+
+
+-<flow doc:id="4a577d44-a2b5-4790-9a91-b89a84a66d6c" name="dbdeleteFlow">
+
+
+-<http:listener doc:id="fbb8cd0c-ae2b-4f0d-a482-acb8019d925d" doc:name="Listener" path="/dbdelete" config-ref="HTTP_Listener_config2">
+
+
+-<http:response>
+
+
+-<http:body>
+
+-<![CDATA[Record delete successfully!]]>
+</http:body>
+
+</http:response>
+
+</http:listener>
+
+
+-<db:delete doc:id="5ab8aa4a-563e-4870-b132-340876091a77" doc:name="Delete" config-ref="Database_Config">
+
+<db:sql>DELETE FROM USER WHERE USER_ID=:ID</db:sql>
+
+
+-<db:input-parameters>
+
+-<![CDATA[#['ID':attributes.queryParams.ID as String]]]>
+</db:input-parameters>
+
+</db:delete>
+
+<logger doc:id="20827f8e-f187-4e0c-9875-ca1376333a11" doc:name="Logger" level="INFO"/>
+
+</flow>
+
+</mule>

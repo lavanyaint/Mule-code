@@ -1,0 +1,18 @@
+
+<http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8081" doc:name="HTTP Listener Configuration"/>
+<flow name="New_Studio_ProjectFlow1" doc:name="New_Studio_ProjectFlow1">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
+        <expression-filter expression="#[message.inboundProperties.'http.request.uri' != '/favicon.ico']" doc:name="Expression"/>
+        <set-variable variableName="Coupon" value="#[message.inboundProperties.'http.query.params'.language]" doc:name="Set Coupon Variable"/>
+        <choice doc:name="Choice">
+            <when expression="">
+                <set-payload value="Discount upto 30%!" doc:name="Coupon1"/>
+            </when>
+            <when expression="">
+                <set-payload value="Discount upto 20%!!" doc:name="Coupon2"/>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choice>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+</flow>

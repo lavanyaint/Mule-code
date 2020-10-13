@@ -1,0 +1,49 @@
+
+-<http:listener-config doc:id="bf82d8b1-353c-4a20-a582-4f9aee9f4852" doc:name="HTTP Listener config" name="HTTP_Listener_config">
+
+<http:listener-connection port="8087" host="0.0.0.0"/>
+
+</http:listener-config>
+
+
+-<db:config doc:id="16414de4-4049-4376-8c01-61e00a575f10" doc:name="Database Config" name="Database_Config">
+
+<db:my-sql-connection port="3306" host="mysql.techriya.com" database="etms" password="Mule@2019" user="muleusr1"/>
+
+</db:config>
+
+
+-<flow doc:id="ce56271e-d15c-47f5-a1d8-f182639f3102" name="dbbulkinsertFlow">
+
+
+-<http:listener doc:id="65c4d032-9e9a-4e0d-89f8-62bf28402d32" doc:name="Listener" path="/dbbulkinsert" config-ref="HTTP_Listener_config">
+
+
+-<http:response>
+
+
+-<http:body>
+
+-<![CDATA[Bulk Insert Successfully!]]>
+</http:body>
+
+</http:response>
+
+</http:listener>
+
+
+-<db:bulk-insert doc:id="974e196f-6828-4fd1-b9bb-421859c73605" doc:name="Bulk insert" config-ref="Database_Config">
+
+
+-<db:bulk-input-parameters>
+
+-<![CDATA[#[[{'USER_ID' : 'SAMUL', 'COURSE_ID' : 'MULE4','DATE': '2019-05-30','PRESENT': 'Y'},{'USER_ID' : 'xyz', 'COURSE_ID' : 'MULE4','DATE': '2019-08-20','PRESENT': 'Y'}]]]]>
+</db:bulk-input-parameters>
+
+<db:sql>INSERT INTO ATTENDANCE1(USER_ID,COURSE_ID,DATE,PRESENT) VALUES (:USER_ID, :COURSE_ID, :DATE, :PRESENT)</db:sql>
+
+</db:bulk-insert>
+
+</flow>
+
+</mule>

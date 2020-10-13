@@ -1,0 +1,56 @@
+
+-<http:listener-config doc:id="b570b640-05ab-420e-9fa0-1f3a4b01b369" doc:name="HTTP Listener config" name="HTTP_Listener_config">
+
+<http:listener-connection port="8099" host="0.0.0.0"/>
+
+</http:listener-config>
+
+
+-<db:config doc:id="c82d75d8-fd42-45a6-a3c5-4c4011d716a2" doc:name="Database Config" name="Database_Config">
+
+<db:my-sql-connection port="3306" host="mysql.techriya.com" database="etms" password="Mule@2019" user="muleusr1"/>
+
+</db:config>
+
+
+-<db:config doc:id="06c8c450-dd1e-4312-8571-95afbde6c1df" doc:name="Database Config" name="Database_Config1">
+
+<db:my-sql-connection port="3306" host="mysql.techriya.com" database="etms" password="Mule@2019" user="muleusr1"/>
+
+</db:config>
+
+
+-<flow doc:id="c4d68b9d-1712-4968-8d4e-40932ccd294f" name="dbbulkupdateFlow">
+
+
+-<http:listener doc:id="3e286c27-8e51-493f-8e50-d33607219680" doc:name="Listener" path="/dbbulkdelete" config-ref="HTTP_Listener_config">
+
+
+-<http:response>
+
+
+-<http:body>
+
+-<![CDATA[Bulk Delete Successfully!]]>
+</http:body>
+
+</http:response>
+
+</http:listener>
+
+
+-<db:bulk-delete doc:id="d1b6bd97-d315-48ed-8855-33b0b84359be" doc:name="Bulk delete" config-ref="Database_Config1">
+
+
+-<db:bulk-input-parameters>
+
+-<![CDATA['ID' : attributes.queryParams.ID as String]]>
+</db:bulk-input-parameters>
+
+<db:sql>DELETE FROM USER WHERE USER_ID=:ID</db:sql>
+
+</db:bulk-delete>
+
+</flow>
+
+</mule>

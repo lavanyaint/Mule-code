@@ -1,0 +1,43 @@
+
+-<http:listener-config doc:id="107eed0a-3891-439c-92e0-77ba8d71de5e" doc:name="HTTP Listener config" name="HTTP_Listener_config">
+
+<http:listener-connection port="8086" host="0.0.0.0"/>
+
+</http:listener-config>
+
+
+-<db:config doc:id="51aba771-a238-4e22-b88f-faf7258f5b21" doc:name="Database Config" name="Database_Config">
+
+<db:my-sql-connection port="3306" host="mysql.techriya.com" database="etms" password="Mule@2019" user="muleusr1"/>
+
+</db:config>
+
+
+-<flow doc:id="70ff8fa4-141f-49c9-8405-5f8d5d51e632" name="dbddlFlow">
+
+
+-<http:listener doc:id="b3ec5153-36e4-4b51-b516-d64944777ce8" doc:name="Listener" path="/dbddl" config-ref="HTTP_Listener_config">
+
+
+-<http:response>
+
+
+-<http:body>
+
+-<![CDATA[Table created]]>
+</http:body>
+
+</http:response>
+
+</http:listener>
+
+
+-<db:execute-ddl doc:id="d971e127-67d7-4e53-a71e-3dabb01273fb" doc:name="Execute DDL" config-ref="Database_Config">
+
+<db:sql>CREATE TABLE ATTENDANCE3 ( USER_ID VARCHAR(15) NOT NULL , COURSE_ID CHAR(7) NOT NULL , DATE DATE NOT NULL , PRESENT CHAR(1) NOT NULL)</db:sql>
+
+</db:execute-ddl>
+
+</flow>
+
+</mule>

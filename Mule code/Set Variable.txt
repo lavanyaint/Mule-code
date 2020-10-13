@@ -1,0 +1,9 @@
+<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="2027c193-6b38-4de7-9a3c-1e465491a67c" >
+          <http:listener-connection host="0.0.0.0" port="8085" />
+     </http:listener-config>
+     <flow name="firstapplFlow" doc:id="02e570ef-9663-4c42-92a3-e549759e1c98" >
+          <http:listener doc:name="Listener" doc:id="6dab304b-cd34-4293-b002-9cf2bac4adfa" config-ref="HTTP_Listener_config" path="/var"/>
+          <set-variable value="xyz" doc:name="Set Variable" doc:id="a11d87d8-d44d-4add-85d7-7855594da1e2" variableName="fname"/>
+          <set-payload value="#[vars.fname]" doc:name="Set Payload" doc:id="a94833c0-2de2-4c18-ad89-d3ddac7ca487" />
+          <logger level="INFO" doc:name="Logger" doc:id="d91ada32-3fdf-4d80-aef8-a0dc38d83fcf" message="This is 4.x mule app"/>
+  </flow>

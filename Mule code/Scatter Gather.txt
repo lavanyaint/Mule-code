@@ -1,0 +1,111 @@
+++Sample code
+
+<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e0d73a74-54ca-450d-9222-5c2f4624296b" >
+ 
+                                <http:listener-connection host="0.0.0.0" port="8081" />
+ 
+                </http:listener-config>
+ 
+                <http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="580403e8-e1e8-4e07-9ebc-9b7f86619eaf" >
+ 
+                                <http:request-connection host="dummy.restapiexample.com" />
+ 
+                </http:request-config>
+ 
+                <db:config name="Database_Config" doc:name="Database Config" doc:id="e4f52c26-20a5-4a1e-8a2b-b73805417a62">
+<db:oracle-connection host="localhost" user="root " password="Oracle123" instance="orcl" />
+ 
+                </db:config>
+ 
+                <flow name="scattergatherFlow" doc:id="1253d682-5f6c-4332-8853-5f1f8d1b5944" >
+ 
+                                <http:listener doc:name="Listener" doc:id="545c21ac-ab6f-4fff-8ef5-d3fafbe4e62a" config-ref="HTTP_Listener_config" path="/testscattergather"/>
+ 
+                                <set-variable value="2" doc:name="Set Variable" doc:id="44e27729-fe00-4903-a7db-40d146694c4f" variableName="cust_id"/>
+ 
+                                <scatter-gather doc:name="Scatter-Gather" doc:id="6698cef7-6a39-4365-8062-f2d3fd4736a2" > 
+                                             <route >
+ 
+                                                                <db:select doc:name="Select" doc:id="36b78dfa-a707-403a-8c7a-9b5c8467044c" config-ref="Database_Config">
+ 
+                                                                                <db:sql>select * from address where customer_id=:cust_id</db:sql>
+ 
+                                                                                <db:input-parameters><![CDATA[#[{cust_id:vars.cust_id}]]]></db:input-parameters>
+ 
+                                                                </db:select>
+                                                </route>
+
+<route >
+ 
+                                                                <db:select doc:name="Select" doc:id="306928f6-3dd1-499c-8dc6-e3cd7b21c2d0" config-ref="Database_Config">
+ 
+                                                                                <db:sql >select * from customers where customer_id=:cust_id</db:sql>
+ 
+                                                                                <db:input-parameters ><![CDATA[#[{cust_id:vars.cust_id}]]]></db:input-parameters>
+ 
+                                                                </db:select>
+ 
+                                                </route>
+ 
+                                </scatter-gather>
+ 
+                                <ee:transform doc:name="Transform Message" doc:id="7399ba12-7e9c-4e20-a54f-ca6ffd18a4d7" >
+ 
+                                                <ee:message >
+ 
+                                                                <ee:set-payload ><![CDATA[%dw 2.0
+
+output application/json
+ 
+---
+ 
+payload]]></ee:set-payload>
+ 
+                                                </ee:message>
+ 
+                                </ee:transform>
+ 
+                                <ee:transform doc:name="Transform Message" doc:id="99621d72-2f19-47ee-b6d8-9a9d37e8bfac" >
+ 
+                                                <ee:message >
+ 
+                            <ee:set-payload ><![CDATA[%dw 2.0 
+
+output application/json
+ 
+---
+ 
+payload]]></ee:set-payload>
+ 
+                                                </ee:message>
+ 
+                                </ee:transform>
+ 
+     <ee:transform doc:name="Transform Message" doc:id="99621d72-2f19-47ee-b6d8-9a9d37e8bfac" >
+ 
+                              <ee:message >
+ 
+                            <ee:set-payload ><![CDATA[%dw 2.0 
+
+output application/json
+ 
+---
+ 
+(payload[0].payload ++ payload[1].payload) reduce ($ ++ $$)]]></ee:set-payload>
+ 
+                              </ee:message>
+ 
+                                </ee:transform>
+ 
+     <logger level="INFO" doc:name="Logger" doc:id="c1fb88df-5fa9-455c-806e-67e61b583309" message="Response Received"/>
+ 
+                </flow>     
+
+
+
+ 
+ 
+
+
+ 
+                               

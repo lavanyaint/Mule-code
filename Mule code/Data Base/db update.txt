@@ -1,0 +1,64 @@
+
+-<http:listener-config doc:id="4cf67c78-dfb3-444a-ba43-f6998655d5e2" doc:name="HTTP Listener config" name="HTTP_Listener_config">
+
+<http:listener-connection port="8089" host="0.0.0.0"/>
+
+</http:listener-config>
+
+
+-<db:config doc:id="92225304-0198-4e35-8604-0a196cddbc44" doc:name="Database Config" name="Database_Config">
+
+<db:my-sql-connection port="3306" host="mysql.techriya.com" database="etms" password="Mule@2019" user="muleusr1"/>
+
+</db:config>
+
+
+-<flow doc:id="ec79f0dc-db5c-40cd-8eaf-52d92e1393f7" name="dbupdateFlow">
+
+
+-<http:listener doc:id="d3db40a4-9b88-47da-8b59-c53976f1478d" doc:name="Listener" path="/dbupdate" config-ref="HTTP_Listener_config">
+
+
+-<http:response>
+
+
+-<http:body>
+
+-<![CDATA[Update Successfully!]]>
+</http:body>
+
+</http:response>
+
+</http:listener>
+
+
+-<db:update doc:id="3a6fb2c3-6191-421f-ab88-d814c16b120f" doc:name="Update" config-ref="Database_Config">
+
+<db:sql>UPDATE ATTENDANCE1 SET USER_ID='KONSAM' WHERE DATE='2019-05-16'</db:sql>
+
+</db:update>
+
+
+-<ee:transform doc:id="3694ce65-7496-481d-a31b-92dad4a77259" doc:name="Transform Message">
+
+
+-<ee:message>
+
+
+-<ee:set-payload>
+
+-<![CDATA[%dw 2.0
+output application/java
+---
+payload]]>
+</ee:set-payload>
+
+</ee:message>
+
+</ee:transform>
+
+<logger doc:id="10a290d6-8a4d-4426-9b26-a6121b687c8c" doc:name="Logger" level="INFO"/>
+
+</flow>
+
+</mule>

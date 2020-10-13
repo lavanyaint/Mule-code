@@ -1,0 +1,18 @@
+<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d7122862-96d0-4e57-b3a7-ed8a43c4536d" >
+          <http:listener-connection host="0.0.0.0" port="8085" />
+     </http:listener-config>
+     <flow name="test_unsuccessfulFlow" doc:id="20d81ba6-bdd1-471b-9b2d-e600714114ad" >
+          <http:listener doc:name="Listener" doc:id="11cd4dfb-1b23-404b-a8b8-b6707d2144a9" config-ref="HTTP_Listener_config" path="/until"/>
+          <until-successful maxRetries="5" doc:name="Until Successful" doc:id="0ef7fc0d-1d2e-428e-b17d-7fb57eca786a" millisBetweenRetries="5000">
+              <ee:transform doc:name="Transform Message" doc:id="8200c4f6-5e13-4e8f-bb2f-734852b2bf26" >
+                   <ee:message >
+                        <ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+     id:- payload.id
+}]]></ee:set-payload>
+                   </ee:message>
+              </ee:transform>
+          </until-successful>
+     </flow>

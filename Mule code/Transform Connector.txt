@@ -1,0 +1,16 @@
+INPUT:
+{
+  "FirstName": "jadhav",
+  "LastName": "stow",
+  "Company": "zoho"
+}
+
+DATAWEAVE 2.0 SCRIPT
+%dw 2.0
+output application/json
+fun function(arg) = if(arg == "zoho") "Match" else "No Match"
+---
+function(payload.Company)
+
+OUTPUT:
+Match
